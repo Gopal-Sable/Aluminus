@@ -1,0 +1,38 @@
+
+
+
+display-flex,
+.display-flex
+.display-flex-center,
+.signup-content,
+.signin-content,
+.social-login,
+.socials{
+  display: flex;
+  display: -webkit-flex;
+}
+
+.signup-form{
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+  align-items: center;
+}
+.signup-img{
+display: flex;
+justify-content: center;
+align-items: center;
+flex-direction: column;
+
+}
+.form-group{
+  position: relative;
+  margin-bottom: 25px;
+  overflow: hidden;
+}
+.register-form{
+  width: 100%;
+}
+
+
+;

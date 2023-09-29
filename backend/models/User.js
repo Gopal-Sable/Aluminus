@@ -9,7 +9,7 @@ const alumniSchema = new mongoose.Schema({
     batch: { type: Number, required: true }, //year of batch
     password: { type: String, required: true },
     Department: { type: String, required: true },
-    contactNumber: { type: String, required: true },
+    contactNumber: { type: Number, required: true },
     linkedInProfile: String,
     currentCompany: String,
     location: String,
