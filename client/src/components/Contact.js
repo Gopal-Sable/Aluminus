@@ -155,6 +155,18 @@ const contactForm= async (e)=>{
                            </form>
                        </div>
                    </div>
+                   <div>
+      <iframe
+        title="Google Maps"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3752.3254408652897!2d75.32137977502128!3d19.868475326617073!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bdb9861a6d01f43%3A0x3a1b932d329091e9!2sGovernment%20College%20Of%20Engineering%2C%20Aurangabad!5e0!3m2!1sen!2sin!4v1699000938890!5m2!1sen!2sin"
+        width="1200"
+        height="450"
+        style={{ border: 0 }}
+        allowFullScreen
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div>
                </div>
            </div>
        </div>

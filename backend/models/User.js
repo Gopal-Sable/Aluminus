@@ -14,8 +14,9 @@ const alumniSchema = new mongoose.Schema({
     currentCompany: String,
     location: String,
     DomainOfWork: String,
-    Designation:String
-
+    Designation:String,
+    profileImage: { type: Buffer }, // Add a field for image data
+    imageType: { type: String }
 });
 
 // Define the Event Schema

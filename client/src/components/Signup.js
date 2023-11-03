@@ -20,28 +20,81 @@ const Signup = () => {
         Designation: "",
         cpassword: ""
     })
+    const [errors, setErrors] = useState({});
+    const [serverErrors, setServerErrors] = useState({});
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     const { firstName, lastName, email, batch, password, Department, contactNumber, linkedInProfile, currentCompany, location, DomainOfWork, Designation } = credentials;
+    //     const response = await fetch("http://localhost:5000/api/auth/alumni", {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify({ firstName, lastName, email, batch, password, Department, contactNumber, linkedInProfile, currentCompany, location, DomainOfWork, Designation })
+    //     });
+    //     const json = await response.json()
+    //     console.log(json);
+    //     if (json.success) {
+    //         // Save the auth token and redirect
+    //         localStorage.setItem('token', json.authtoken);
+    //         history.push("/about");
+    //         console.log("successFul");
+    //     }
+    //     else {
+    //         console.log("eroorrrooro");
+    //     }
+    // }
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { firstName, lastName, email, batch, password, Department, contactNumber, linkedInProfile, currentCompany, location, DomainOfWork, Designation } = credentials;
-        const response = await fetch("http://localhost:5000/api/auth/alumni", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ firstName, lastName, email, batch, password, Department, contactNumber, linkedInProfile, currentCompany, location, DomainOfWork, Designation })
-        });
-        const json = await response.json()
-        console.log(json);
-        if (json.success) {
-            // Save the auth token and redirect
-            localStorage.setItem('token', json.authtoken);
-            history.push("/about");
-            console.log("successFul");
+
+        if (validateForm()) {
+            // Proceed with form submission
+            const response = await fetch("http://localhost:5000/api/auth/alumni", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(credentials),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                localStorage.setItem('token', data.authtoken);
+                history.push("/about");
+                console.log("Successful");
+            } else {
+                if (data.errors) {
+                    // Handle validation errors from the server
+                    setServerErrors(data.errors.reduce((acc, error) => {
+                        acc[error.param] = error.msg;
+                        return acc;
+                    }, {}));
+                } else {
+                    console.log("Server error:", data.message);
+                }
+            }
+        } else {
+            console.log("Form contains validation errors. Please correct them.");
         }
-        else {
-            console.log("eroorrrooro");
+    };
+    const validateForm = () => {
+        const errors = {};
+
+        // Client-side validation rules
+
+        // For each input field:
+        if (!credentials.firstName.trim()) {
+            errors.firstName = "First Name is required";
         }
-    }
+        if (credentials.password !== credentials.cpassword) {
+            errors.cpassword = "Passwords does not match";
+        }
+        // Add more client-side validation rules for other fields
+
+        setErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
 
     const onChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value })
@@ -62,9 +115,18 @@ const Signup = () => {
                                     </label>
                                     <input type="text" name="firstName" id="firstName" autoComplete="off"
                                         value={credentials.firstName} onChange={onChange} placeholder="First Name" />
+                                    {errors.firstName && <div className="error-message" style={{ color: 'red' }}>{errors.firstName}</div>}
+                                    {serverErrors.firstName && <div className="error-message" style={{ color: 'red' }}>{serverErrors.firstName}</div>}
                                     <span className="input-group-addon">   </span>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="name">
+                                        <i className="zmdi zmdi-account" style={{ marginRight: 1 + 'em' }} />
+                                    </label>
                                     <input type="text" name="lastName" id="lastName" autoComplete="off"
                                         value={credentials.lastName} onChange={onChange} placeholder="Last Name" />
+                                    {errors.lastName && <div className="error-message" style={{ color: 'red' }}>{errors.lastName}</div>}
+                                    {serverErrors.lastName && <div className="error-message" style={{ color: 'red' }}>{serverErrors.lastName}</div>}
                                 </div>
 
                                 <div className="form-group>">
@@ -73,6 +135,8 @@ const Signup = () => {
                                     </label>
                                     <input type="email" name="email" id="email" autoComplete="off"
                                         value={credentials.email} onChange={onChange} placeholder="Email" />
+                                    {errors.email && <div className="error-message" style={{ color: 'red' }}>{errors.email}</div>}
+                                    {serverErrors.email && <div className="error-message" style={{ color: 'red' }}>{serverErrors.email}</div>}
                                 </div>
 
                                 <div className="form-group>">
@@ -85,6 +149,8 @@ const Signup = () => {
                                     </label>
                                     <input type="number" name="batch" id="batch" autoComplete="off" min="1995" max="2025" style={{ width: '190px' }}
                                         value={credentials.batch} onChange={onChange} placeholder="Year of Graduation" />
+                                    {errors.batch && <div className="error-message" style={{ color: 'red' }}>{errors.batch}</div>}
+                                    {serverErrors.batch && <div className="error-message" style={{ color: 'red' }}>{serverErrors.batch}</div>}
                                 </div>
 
                                 <div className="form-group>">
@@ -93,6 +159,8 @@ const Signup = () => {
                                     </label>
                                     <input type="number" name="contactNumber" id="contactNumber" minLength={10} maxLength={10} autoComplete="off"
                                         value={credentials.contactNumber} onChange={onChange} placeholder="Contatct Number" />
+                                    {errors.contactNumber && <div className="error-message" style={{ color: 'red' }}>{errors.contactNumber}</div>}
+                                    {serverErrors.contactNumber && <div className="error-message" style={{ color: 'red' }}>{serverErrors.contactNumber}</div>}
                                 </div>
 
 
@@ -114,6 +182,8 @@ const Signup = () => {
                                     </label>
                                     <input type="text" name="Department" id="Department" autoComplete="off"
                                         value={credentials.Department} onChange={onChange} placeholder="Department" />
+                                    {errors.Department && <div className="error-message" style={{ color: 'red' }}>{errors.Department}</div>}
+                                    {serverErrors.Department && <div className="error-message" style={{ color: 'red' }}>{serverErrors.Department}</div>}
                                 </div>
 
 
@@ -166,9 +236,17 @@ const Signup = () => {
                                     </label>
                                     <input type="password" name="password" id="password" autoComplete="off"
                                         value={credentials.password} onChange={onChange} placeholder="Password" />
+                                    {errors.password && <div className="error-message" style={{ color: 'red' }}>{errors.password}</div>}
+                                    {serverErrors.password && <div className="error-message" style={{ color: 'red' }}>{serverErrors.password}</div>}
                                     <span className="input-group-addon">   </span>
+                                </div>
+                                <div className="form-group>">
+                                    <label htmlFor="password">
+                                        <i className="zmdi zmdi-lock-outline" style={{ marginRight: 1 + 'em' }}></i>
+                                    </label>
                                     <input type="password" name="cpassword" id="cpassword" autoComplete="off"
                                         value={credentials.cpassword} onChange={onChange} placeholder="Confirm Password" />
+                                    {errors.cpassword && <div className="error-message" style={{ color: 'red' }}>{errors.cpassword}</div>}
                                 </div>
 
                                 <div className="form-group form-button">
